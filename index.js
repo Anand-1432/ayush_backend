@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./routes/auth");
 const product = require("./routes/product");
+const order = require("./routes/order");
 const cart = require("./routes/cart");
 const dotenv = require("dotenv");
 dotenv.config({ path: "config/.env" });
@@ -10,7 +11,7 @@ const app = express();
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "http://localhost:3000", // your frontend server
+  origin: ["http://localhost:3000", "http://localhost:3030"], // your frontend server
   credentials: true, // include credentials
 };
 
@@ -33,6 +34,7 @@ app.use(
 app.use("/api/v1", auth);
 app.use("/api/v1", product);
 app.use("/api/v1", cart);
+app.use("/api/v1", order);
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));

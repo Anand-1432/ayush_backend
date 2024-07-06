@@ -6,7 +6,8 @@ const error = require("./error");
 
 // checks if user is authenticated or not
 exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
-  const { token } = req.cookies;
+  
+  const token = String(req.headers.authorization).split(" ")[1];
 
   if (!token) {
     return next(new ErrorHandler("login first to access this resource", 401));

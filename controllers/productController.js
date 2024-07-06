@@ -3,6 +3,9 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const cloudinary = require("cloudinary");
 const APIFeatures = require("../utils/apiFeatures");
+const xlsx = require('xlsx');
+const fs = require('fs');
+
 
 //create new product => api/vi/admin/products/new
 exports.newProduct = catchAsyncError(async (req, res, next) => {
@@ -236,3 +239,28 @@ exports.deleteProductReview = catchAsyncError(async (req, res, next) => {
     success: true,
   });
 });
+
+
+//------------------------ Add Product by excel ----------------//
+exports.createProductsByExcel = (req, res) => {
+  const filePath = req.file.path;
+
+  try {
+    const workbook = xlsx.readFile(filePath);
+    const sheetNameList = workbook.SheetNames;
+    const jsonData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetNameList[0]]);
+
+    // Delete the file after reading its data
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error('Error deleting file:', err);
+      } else {
+        res.json(jsonData);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error parsing the Excel file');
+  }
+};
+

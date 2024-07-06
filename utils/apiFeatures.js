@@ -30,6 +30,13 @@ class APIFeatures {
     queryStr = queryStr.replace(/\b(lt|lte|gt|gte)\b/g, (match) => `$${match}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
+
+    // Handle categories
+    if (queryCopy.categories) {
+      const categories = queryCopy.categories.split(",");
+      this.query = this.query.find({ category: { $in: categories } });
+    }
+
     return this;
   }
 
