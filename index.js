@@ -12,7 +12,7 @@ app.use(cookieParser());
 
 const corsOptions = {
   origin: ["http://localhost:3000", "http://localhost:3030"], // your frontend server
-  credentials: true, // include credentials
+  credentials: true, 
 };
 
 app.use(cors(corsOptions));
